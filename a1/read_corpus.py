@@ -99,11 +99,34 @@ def reduce_to_k_dim(M, k=2):
     return M_reduced
 
 
+def plot_embeddings(M_reduced, word2Ind, words):
+    """ Plot in a scatterplot the embeddings of the words specified in the list "words".
+        NOTE: do not plot all the words listed in M_reduced / word2Ind.
+        Include a label next to each point.
+
+        Params:
+            M_reduced (numpy matrix of shape (number of unique words in the corpus , 2)): matrix of 2-dimensioal word embeddings
+            word2Ind (dict): dictionary that maps word to indices for matrix M
+            words (list of strings): words whose embeddings we want to visualize
+    """
+
+    # ------------------
+    fig, ax = plt.subplots()
+    ax.scatter(M_reduced[:,0], M_reduced[:,1])
+    for word in words:
+        if word in word2Ind:
+            index = word2Ind[word]
+            ax.annotate(word, (M_reduced[index][0], M_reduced[index][1]))
+    plt.show()
+    # ------------------
+
+
 def main():
     reuters_corpus = read_corpus()
     corpus_words, num_corpus_words = distinct_words(reuters_corpus)
     M, word2Ind = compute_co_occurrence_matrix(corpus_words, num_corpus_words)
     M_reduced = reduce_to_k_dim(M, k=2)
+    plot_embeddings(M_reduced, word2Ind, corpus_words)
     print(num_corpus_words)
 
 
